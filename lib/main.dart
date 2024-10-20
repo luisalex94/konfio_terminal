@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -32,6 +35,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool _isPayments = true;
+  bool _isLoading = false;
   double _amountValue = 0.0;
   String response = '';
 
@@ -87,6 +91,62 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Future<bool> _requestCharge() async {
+    setState(() {
+      _isLoading = true;
+    });
+    var url = Uri.parse(
+        'https://dw73vr1mj3.execute-api.us-east-1.amazonaws.com/prod/charge-movement');
+    var payload = {
+      "account": "48682426",
+      "concept": "Terminal - 001 - charge",
+      "amount": _amountValue,
+      "date": DateTime.now().toIso8601String(),
+    };
+    // convierte payload a json
+    var payloadJson = jsonEncode(payload);
+
+    var response = await http.post(url, body: payloadJson);
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> _requestDeposit() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    var url = Uri.parse(
+        'https://dw73vr1mj3.execute-api.us-east-1.amazonaws.com/prod/deposit-movement');
+    var payload = {
+      "account": "48682426",
+      "concept": "Terminal - 001 - deposit",
+      "amount": _amountValue,
+      "date": DateTime.now().toIso8601String(),
+    };
+    var payloadJson = jsonEncode(payload);
+
+    var response = await http.post(url, body: payloadJson);
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Widget buttons() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -128,19 +188,25 @@ class _MyHomePageState extends State<MyHomePage> {
       width: MediaQuery.of(context).size.width - 100,
       height: 60,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          if (_isPayments) {
+            _requestCharge();
+          } else {
+            _requestDeposit();
+          }
+        },
         style: ElevatedButton.styleFrom(),
-        child: Text(_isPayments ? 'Charge' : 'Refund'),
+        child: _isLoading
+            ? const CircularProgressIndicator()
+            : Text(_isPayments ? 'Charge' : 'Refund'),
       ),
     );
   }
 
   void _amountValueString(String data) {
-    print('_amountValueString: $data');
-    // si data es un número
     if (double.tryParse(data) != null) {
       response = response + data.toString();
-    } else if (data == 'backspace' && response.length > 0) {
+    } else if (data == 'backspace' && response.isNotEmpty) {
       response = response.substring(0, response.length - 1);
     } else if (data == 'clear') {
       response = '';
