@@ -38,6 +38,10 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _isLoading = false;
   double _amountValue = 0.0;
   String response = '';
+  String account = '48682426';
+
+  // controlador de texto
+  final TextEditingController _accountController = TextEditingController();
 
   void _paymentsButton() {
     setState(() {
@@ -58,6 +62,18 @@ class _MyHomePageState extends State<MyHomePage> {
         leading: Image.asset('assets/konfio_logo_cuadrado.png'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            onPressed: () {
+              _userConfiguration();
+            },
+            icon: const Icon(
+              Icons.account_circle_outlined,
+              size: 30,
+              color: Color.fromARGB(255, 145, 38, 109),
+            ),
+          ),
+        ],
       ),
       body: body(),
     );
@@ -98,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var url = Uri.parse(
         'https://dw73vr1mj3.execute-api.us-east-1.amazonaws.com/prod/charge-movement');
     var payload = {
-      "account": "48682426",
+      "account": account,
       "concept": "Terminal - 001 - charge",
       "amount": _amountValue,
       "date": DateTime.now().toIso8601String(),
@@ -113,10 +129,230 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     if (response.statusCode == 200) {
+      _successMovement();
       return true;
+    } else if (response.statusCode == 400) {
+      _insufficientFunds();
+      return false;
+    } else if (response.statusCode == 404) {
+      _accountNotFound();
+      return false;
     } else {
+      _generalError();
       return false;
     }
+  }
+
+  void _successMovement() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            content: SizedBox(
+          width: MediaQuery.of(context).size.width - 100,
+          height: 260,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.check_circle_outline_outlined,
+                  size: 50,
+                  color: Color.fromARGB(255, 3, 138, 7),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Transaction completed successfully',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'The transaction has been completed successfully',
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Close'))
+              ],
+            ),
+          ),
+        ));
+      },
+    );
+  }
+
+  void _insufficientFunds() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            content: SizedBox(
+          width: MediaQuery.of(context).size.width - 100,
+          height: 260,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.error,
+                  size: 50,
+                  color: Colors.red,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Insufficient funds',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'The account does not have enough funds to complete the transaction',
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Close'))
+              ],
+            ),
+          ),
+        ));
+      },
+    );
+  }
+
+  void _generalError() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            content: SizedBox(
+          width: MediaQuery.of(context).size.width - 100,
+          height: 260,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.error,
+                  size: 50,
+                  color: Colors.red,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'General error',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'The transaction could not be completed, please try again later',
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Close'))
+              ],
+            ),
+          ),
+        ));
+      },
+    );
+  }
+
+  void _accountNotFound() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            content: SizedBox(
+          width: MediaQuery.of(context).size.width - 100,
+          height: 260,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.error,
+                  size: 50,
+                  color: Colors.red,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Account not found',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'The account number does not exist, please verify the account number',
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Close'))
+              ],
+            ),
+          ),
+        ));
+      },
+    );
   }
 
   Future<bool> _requestDeposit() async {
@@ -127,7 +363,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var url = Uri.parse(
         'https://dw73vr1mj3.execute-api.us-east-1.amazonaws.com/prod/deposit-movement');
     var payload = {
-      "account": "48682426",
+      "account": account,
       "concept": "Terminal - 001 - deposit",
       "amount": _amountValue,
       "date": DateTime.now().toIso8601String(),
@@ -141,8 +377,10 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     if (response.statusCode == 200) {
+      _successMovement();
       return true;
     } else {
+      _generalError();
       return false;
     }
   }
@@ -214,6 +452,78 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _amountValue = (response.isEmpty ? 0.0 : double.parse(response)) / 100;
     });
+  }
+
+  void _userConfiguration() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            content: SizedBox(
+          width: MediaQuery.of(context).size.width - 100,
+          height: 400,
+          child: _userConfigurationPopUp(),
+        ));
+      },
+    );
+  }
+
+  Widget _userConfigurationPopUp() {
+    String accountTemp = '';
+
+    if (account.isEmpty) {
+      accountTemp = 'No account';
+    } else {
+      accountTemp = account;
+    }
+
+    return Column(
+      children: [
+        const Text('Enter your account number', style: TextStyle(fontSize: 20)),
+        const SizedBox(height: 10),
+        Text('Actual account: $accountTemp',
+            style: const TextStyle(fontSize: 16)),
+        const SizedBox(height: 10),
+        TextField(
+          controller: _accountController,
+          onChanged: (value) {},
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Enter your account',
+          ),
+        ),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                account = "48682426";
+                _accountController.clear();
+                Navigator.of(context).pop();
+              },
+              child: const Text('P1'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                account = "17799331";
+                _accountController.clear();
+                Navigator.of(context).pop();
+              },
+              child: const Text('P2'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                account = _accountController.text;
+                _accountController.clear();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   Widget numericalKeyboard() {
