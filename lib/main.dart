@@ -196,6 +196,59 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void _amountZero() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            content: SizedBox(
+          width: MediaQuery.of(context).size.width - 100,
+          height: 260,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.info_outline,
+                  size: 50,
+                  color: Color.fromARGB(255, 255, 154, 2),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Amount is zero',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'The amount to be charged must be greater than zero',
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Close'))
+              ],
+            ),
+          ),
+        ));
+      },
+    );
+  }
+
   void _insufficientFunds() {
     showDialog(
       context: context,
@@ -427,6 +480,10 @@ class _MyHomePageState extends State<MyHomePage> {
       height: 60,
       child: ElevatedButton(
         onPressed: () {
+          if (_amountValue == 0) {
+            _amountZero();
+            return;
+          }
           if (_isPayments) {
             _requestCharge();
           } else {
