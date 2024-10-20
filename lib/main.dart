@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Konfio terminal'),
+      
     );
   }
 }
@@ -31,14 +32,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  bool _isPayments = true;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  bool _isPayments = true;  
+  double _amountValue = 0.0;
 
   void _paymentsButton() {
     setState(() {
@@ -73,10 +68,11 @@ class _MyHomePageState extends State<MyHomePage> {
           const SizedBox(height: 20),
           buttons(),
           const SizedBox(height: 20),
-          const Text(
-            'You have pushed the button this many times:',
-          ),
+          amountBox(),
+          const SizedBox(height: 20),
           numericalKeyboard(),
+          const SizedBox(height: 20),
+          actionButton(),
         ],
       ),
     );
@@ -100,6 +96,34 @@ class _MyHomePageState extends State<MyHomePage> {
           child: const Text('Chargebacks'),
         ),
       ],
+    );
+  }
+
+  Widget amountBox() {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        //border: Border.all(color: Colors.black),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Text(
+        '\$ ${_amountValue.toStringAsFixed(2)}',
+        style: const TextStyle(
+            fontSize: 46, color: Color.fromARGB(255, 135, 13, 139)),
+      ),
+    );
+  }
+
+  Widget actionButton() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width - 100,
+      height: 60,
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+        ),
+        child: Text(_isPayments ? 'Charge' : 'Refund'),
+      ),
     );
   }
 
