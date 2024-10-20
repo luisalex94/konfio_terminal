@@ -17,7 +17,6 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Konfio terminal'),
-      
     );
   }
 }
@@ -32,8 +31,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool _isPayments = true;  
+  bool _isPayments = true;
   double _amountValue = 0.0;
+  String response = '';
 
   void _paymentsButton() {
     setState(() {
@@ -120,11 +120,26 @@ class _MyHomePageState extends State<MyHomePage> {
       height: 60,
       child: ElevatedButton(
         onPressed: () {},
-        style: ElevatedButton.styleFrom(
-        ),
+        style: ElevatedButton.styleFrom(),
         child: Text(_isPayments ? 'Charge' : 'Refund'),
       ),
     );
+  }
+
+  void _amountValueString(String data) {
+    print('_amountValueString: $data');
+    // si data es un número
+    if (double.tryParse(data) != null) {
+      response = response + data.toString();
+    } else if (data == 'backspace' && response.length > 0) {
+      response = response.substring(0, response.length - 1);
+    } else if (data == 'clear') {
+      response = '';
+    }
+    setState(() {
+      _amountValue = (response.isEmpty ? 0.0 : double.parse(response)) / 100;
+    });
+    
   }
 
   Widget numericalKeyboard() {
@@ -134,7 +149,9 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                _amountValueString('1');
+              },
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(20),
@@ -145,7 +162,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                _amountValueString('2');
+              },
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(20),
@@ -156,7 +175,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                _amountValueString('3');
+              },
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(20),
@@ -172,7 +193,9 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                _amountValueString('4');
+              },
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(20),
@@ -183,7 +206,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                _amountValueString('5');
+              },
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(20),
@@ -194,7 +219,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                _amountValueString('6');
+              },
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(20),
@@ -210,7 +237,9 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                _amountValueString('7');
+              },
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(20),
@@ -221,7 +250,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                _amountValueString('8');
+              },
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(20),
@@ -232,7 +263,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                _amountValueString('9');
+              },
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(20),
@@ -248,15 +281,19 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                _amountValueString('clear');
+              },
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(20),
               ),
-              child: const Icon(Icons.info_outline),
+              child: const Icon(Icons.clear),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                _amountValueString('0');
+              },
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(20),
@@ -267,7 +304,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                _amountValueString('backspace');
+              },
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(20),
