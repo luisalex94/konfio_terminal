@@ -32,6 +32,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  bool _isPayments = true;
 
   void _incrementCounter() {
     setState(() {
@@ -39,11 +40,22 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _paymentsButton() {
+    setState(() {
+      _isPayments = true;
+    });
+  }
+
+  void _chargebacksButton() {
+    setState(() {
+      _isPayments = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //logo de lado derecho del appbar:
         leading: Image.asset('assets/konfio_logo_cuadrado.png'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
@@ -58,14 +70,13 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
+          const SizedBox(height: 20),
           buttons(),
+          const SizedBox(height: 20),
           const Text(
             'You have pushed the button this many times:',
           ),
-          Text(
-            '$_counter',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
+          numericalKeyboard(),
         ],
       ),
     );
@@ -76,12 +87,170 @@ class _MyHomePageState extends State<MyHomePage> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         ElevatedButton(
-          onPressed: _incrementCounter,
-          child: const Text('Payments'),
-        ),
+            onPressed: _paymentsButton,
+            style: ElevatedButton.styleFrom(
+                backgroundColor: _isPayments ? Colors.amber : Colors.white,
+                fixedSize: const Size(160, 40)),
+            child: const Text('Payments')),
         ElevatedButton(
-          onPressed: _incrementCounter,
+          onPressed: _chargebacksButton,
+          style: ElevatedButton.styleFrom(
+              backgroundColor: _isPayments ? Colors.white : Colors.amber,
+              fixedSize: const Size(160, 40)),
           child: const Text('Chargebacks'),
+        ),
+      ],
+    );
+  }
+
+  Widget numericalKeyboard() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(20),
+              ),
+              child: const Text(
+                '1',
+                style: TextStyle(fontSize: 24),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(20),
+              ),
+              child: const Text(
+                '2',
+                style: TextStyle(fontSize: 24),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(20),
+              ),
+              child: const Text(
+                '3',
+                style: TextStyle(fontSize: 24),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(20),
+              ),
+              child: const Text(
+                '4',
+                style: TextStyle(fontSize: 24),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(20),
+              ),
+              child: const Text(
+                '5',
+                style: TextStyle(fontSize: 24),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(20),
+              ),
+              child: const Text(
+                '6',
+                style: TextStyle(fontSize: 24),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(20),
+              ),
+              child: const Text(
+                '7',
+                style: TextStyle(fontSize: 24),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(20),
+              ),
+              child: const Text(
+                '8',
+                style: TextStyle(fontSize: 24),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(20),
+              ),
+              child: const Text(
+                '9',
+                style: TextStyle(fontSize: 24),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(20),
+              ),
+              child: const Icon(Icons.info_outline),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(20),
+              ),
+              child: const Text(
+                '0',
+                style: TextStyle(fontSize: 24),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(20),
+              ),
+              child: const Icon(Icons.backspace_outlined),
+            ),
+          ],
         ),
       ],
     );
