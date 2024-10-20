@@ -62,17 +62,26 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget body() {
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          const SizedBox(height: 20),
-          buttons(),
-          const SizedBox(height: 20),
-          amountBox(),
-          const SizedBox(height: 20),
-          numericalKeyboard(),
-          const SizedBox(height: 20),
-          actionButton(),
+          Column(
+            children: [
+              const SizedBox(height: 20),
+              buttons(),
+              const SizedBox(height: 120),
+              amountBox(),
+            ],
+          ),
+          Column(
+            children: [
+              const SizedBox(height: 20),
+              numericalKeyboard(),
+              const SizedBox(height: 20),
+              actionButton(),
+              const SizedBox(height: 20),
+            ],
+          ),
         ],
       ),
     );
@@ -139,7 +148,6 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _amountValue = (response.isEmpty ? 0.0 : double.parse(response)) / 100;
     });
-    
   }
 
   Widget numericalKeyboard() {
