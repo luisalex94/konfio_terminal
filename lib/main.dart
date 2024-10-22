@@ -542,6 +542,7 @@ class _MyHomePageState extends State<MyHomePage> {
             style: const TextStyle(fontSize: 16)),
         const SizedBox(height: 10),
         TextField(
+          keyboardType: TextInputType.number,
           controller: _accountController,
           onChanged: (value) {},
           decoration: const InputDecoration(
@@ -553,7 +554,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ElevatedButton(
+            /*ElevatedButton(
               onPressed: () {
                 account = "48682426";
                 _accountController.clear();
@@ -568,7 +569,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.of(context).pop();
               },
               child: const Text('P2'),
-            ),
+            ),*/
             ElevatedButton(
               onPressed: () {
                 account = _accountController.text;
